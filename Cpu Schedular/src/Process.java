@@ -7,9 +7,6 @@ public class Process {
     private int waitTime;
     private int priority = 0;
     private int AGFactor = 0;
-    public String getName() {
-        return name;
-    }
 
     public Process(String name, String color, int arrivalTime, int completionTime, int burstTime, int waitTime, int priority, int AGFactor) {
         this.name = name;
@@ -21,7 +18,16 @@ public class Process {
         this.priority = priority;
         this.AGFactor = AGFactor;
     }
-
+    public Process(String name, String color, int arrivalTime,int burstTime,int priority){
+        this.name = name;
+        this.color = color;
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
+        this.priority = priority;
+    }
+    public String getName() {
+        return name;
+    }
     public void setName(String name) {
         this.name = name;
     }
