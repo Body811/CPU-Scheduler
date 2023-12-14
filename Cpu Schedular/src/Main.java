@@ -12,7 +12,6 @@ public class Main {
         RRTime = obj.nextInt();
         System.out.print("Enter the context switching: ");
         contextSwitching = obj.nextInt();
-//        Process processes[] = new Process[numOfProcess];
         Queue<Process> processes = new LinkedList<Process>();
         for (int i = 0; i < numOfProcess; i++) {
             String name, color;
@@ -31,7 +30,7 @@ public class Main {
             processes.add(p);
         }
         Scheduler scheduler = new Scheduler(processes);
-//        scheduler.SRTF();
+        scheduler.SRTF();
         scheduler.PriorityScheduling();
     }
 }
