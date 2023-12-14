@@ -119,4 +119,36 @@ public class Scheduler {
         System.out.println("Average Waiting Time: " + averageWaitingTime);
         System.out.println("Average Turnaround Time: " + averageTurnaroundTime);
     }
+
+    public void SJF(int contextSwitch) {
+        ArrayList<Process> processList = new ArrayList<>(processes);
+        int averageTurnaroundTime = 0;
+        int averageWaitingTime = 0;
+        processList.sort(Comparator.comparingInt(Process::getArrivalTime).thenComparing(Process::getBurstTime));
+        int currentTime = contextSwitch;
+
+        for (Process process : processList) {
+
+            if (currentTime < process.getArrivalTime()) {
+                currentTime = process.getArrivalTime();
+            }
+            //execute the process
+            process.setWaitTime(currentTime - process.getArrivalTime());
+            process.setCompletionTime(currentTime + process.getBurstTime());
+            System.out.println(process.getName()+" is executing");
+            System.out.println("Wait time = "+process.getWaitTime());
+            System.out.println("Turnaround time = "+(process.getCompletionTime() - process.getArrivalTime()));
+            System.out.println("------------------------------------");
+
+            //calculating average
+            averageTurnaroundTime += (process.getCompletionTime() - process.getArrivalTime());
+            averageWaitingTime += process.getWaitTime();
+            //updating the current time
+            currentTime += process.getBurstTime() + contextSwitch;
+        }
+        averageTurnaroundTime /= processList.size();
+        averageWaitingTime /= processList.size();
+        System.out.println("Average waiting time = "+ averageWaitingTime);
+        System.out.println("Average turnaround time = "+ averageTurnaroundTime);
+    }
 }
