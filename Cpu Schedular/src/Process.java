@@ -8,6 +8,7 @@ public class Process {
     private int priority = 0;
     private int AGFactor = 0;
 
+
     public Process(String name, String color, int arrivalTime, int completionTime, int burstTime, int waitTime, int priority, int AGFactor) {
         this.name = name;
         this.color = color;
@@ -18,6 +19,7 @@ public class Process {
         this.priority = priority;
         this.AGFactor = AGFactor;
     }
+
     public Process(String name, String color, int arrivalTime,int burstTime,int priority){
         this.name = name;
         this.color = color;
