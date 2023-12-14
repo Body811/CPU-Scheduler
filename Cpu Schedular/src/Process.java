@@ -5,6 +5,7 @@ public class Process {
     private int completionTime;
     private int burstTime;
     private int waitTime;
+    private int turnaroundTime;
     private int priority = 0;
     private int AGFactor = 0;
     private int remainingTime;
@@ -67,6 +68,13 @@ public class Process {
 
     public void setBurstTime(int burstTime) {
         this.burstTime = burstTime;
+    }
+    public int getTurnaroundTime() {
+        return turnaroundTime;
+    }
+
+    public void setTurnaroundTime(int turnaroundTime) {
+        this.turnaroundTime = turnaroundTime;
     }
 
     public int getWaitTime() {
