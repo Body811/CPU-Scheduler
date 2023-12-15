@@ -43,6 +43,7 @@ class Process {
         this.burstTime = burstTime;
         this.priority = priority;
         this.QuantumTime = Quantum;
+        this.remainingTime = burstTime;
     }
 
     public Process(String name, String color, int arrivalTime,int burstTime,int priority){
@@ -51,6 +52,7 @@ class Process {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         this.priority = priority;
+        this.remainingTime = burstTime;
     }
     public int getRemainingTime() {
         return remainingTime;
