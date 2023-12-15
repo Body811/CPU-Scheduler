@@ -203,54 +203,48 @@ class Scheduler {
         System.out.println("Average turnaround time = " + totalTurnaround);
     }
 
-    public void PriorityScheduling() {
-        int agingThreshold = 5;
-        int currentTime = 0;
-        int numberOfProcesses = processes.size();
-        double totalWaitingTime = 0;
-        double totalTurnaroundTime = 0;
-        while (!processes.isEmpty()) {
-            Process currentProcess = null;
-            for (Process process : processes) {
-                if (process.getArrivalTime() <= currentTime) {
-                    currentProcess = process;
-                    break;
-                }
-            }
-            if (currentProcess == null) {
-                currentProcess = processes.poll();
-            } else {
-                for (Process process : processes) {
-                    if (process.getArrivalTime() <= currentTime && process.getPriority() > currentProcess.getPriority()) {
-                        currentProcess = process;
-                    }
-                }
-                for (Process process : processes) {
-                    if (process.getArrivalTime() <= currentTime) {
-                        process.setAGFactor(process.getAGFactor() + 1);
-                        if (process.getAGFactor() >= agingThreshold) {
-                            process.setPriority(process.getPriority() + 1);
-                            process.setAGFactor(0);
-                        }
-                    }
-                }
-                processes.remove(currentProcess);
-            }
-            System.out.println("Executing process: " + currentProcess.getName());
-            currentProcess.setCompletionTime(currentTime + currentProcess.getBurstTime());
-            currentProcess.setWaitTime(currentTime - currentProcess.getArrivalTime());
-            currentProcess.setTurnAround(currentProcess.getWaitTime() + currentProcess.getBurstTime());
-            System.out.println("Waiting Time for " + currentProcess.getName() + ": " + currentProcess.getWaitTime());
-            System.out.println("Turnaround Time for " + currentProcess.getName() + ": " + currentProcess.getTurnAround());
-            totalWaitingTime += currentProcess.getWaitTime();
-            totalTurnaroundTime += currentProcess.getTurnAround();
-            currentTime = currentProcess.getCompletionTime();
+public void PriorityScheduling() {
+    int agingThreshold = 3;
+    int currentTime = 0;
+    int numberOfProcesses = processes.size();
+    double totalWaitingTime = 0;
+    double totalTurnaroundTime = 0;
+
+    ArrayList<Process> processList = new ArrayList<>(processes);
+    processList.sort(Comparator.comparingInt(Process::getArrivalTime).thenComparing(Process::getPriority));
+
+    for (Process process : processList) {
+        Process currentProcess = process;
+        if (currentTime < process.getArrivalTime()) {
+            currentTime = process.getArrivalTime();
         }
-        double averageWaitingTime = totalWaitingTime / numberOfProcesses;
-        double averageTurnaroundTime = totalTurnaroundTime / numberOfProcesses;
-        System.out.println("Average Waiting Time: " + averageWaitingTime);
-        System.out.println("Average Turnaround Time: " + averageTurnaroundTime);
+        for (Process waitingProcess : processList) {
+            if (waitingProcess != currentProcess && waitingProcess.getArrivalTime() <= currentTime) {
+                waitingProcess.setAGFactor(process.getAGFactor() + 1);
+                if (waitingProcess.getAGFactor() >= agingThreshold) {
+                    waitingProcess.setPriority(process.getPriority() + 1);
+                    waitingProcess.setAGFactor(0);
+                }
+            }
+        }
+
+        System.out.println("Executing process: " + process.getName());
+        process.setCompletionTime(currentTime + process.getBurstTime());
+        process.setWaitTime(currentTime - process.getArrivalTime());
+        process.setTurnAround(process.getWaitTime() + process.getBurstTime());
+        System.out.println("Waiting Time for " + process.getName() + ": " + process.getWaitTime());
+        System.out.println("Turnaround Time for " + process.getName() + ": " + process.getTurnAround());
+        totalWaitingTime += process.getWaitTime();
+        totalTurnaroundTime += process.getTurnAround();
+        currentTime = process.getCompletionTime();
     }
+
+    double averageWaitingTime = totalWaitingTime / numberOfProcesses;
+    double averageTurnaroundTime = totalTurnaroundTime / numberOfProcesses;
+    System.out.println("Average Waiting Time: " + averageWaitingTime);
+    System.out.println("Average Turnaround Time: " + averageTurnaroundTime);
+}
+
 
     public void SJF(int contextSwitch) {
         ArrayList<Process> processList = new ArrayList<>(processes);
@@ -465,7 +459,7 @@ public class Main {
             case 3: {
                 System.out.print("Enter the number of processes: ");
                 int numOfProcess = obj.nextInt();
-                processes = new LinkedList<Process>();
+                Queue <Process> processes = new LinkedList<Process>();
                 for (int i = 0; i < numOfProcess; i++) {
 
                     System.out.print("Enter the process name: ");
